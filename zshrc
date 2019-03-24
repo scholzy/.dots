@@ -4,8 +4,14 @@
 ZSH_CONFDIR="$HOME/.zsh"
 [ -d "${ZSH_CONFDIR}" ] || mkdir "${ZSH_CONFDIR}"
 
-# Install a nicer theme.
-[ -d "${ZSH_CONFDIR}/powerlevel10k" ] || git clone https://github.com/romkatv/powerlevel10k "${ZSH_CONFDIR}/powerlevel10k"
-[ -f "${ZSH_CONFDIR}/purepower.zsh" ] || curl -L https://raw.githubusercontent.com/romkatv/dotfiles-public/master/.purepower > "${ZSH_CONFDIR}/purepower.zsh"
-source "${ZSH_CONFDIR}/powerlevel10k/powerlevel10k.zsh-theme"
-source "${ZSH_CONFDIR}/purepower.zsh"
+#
+[ $(hostname) = "spartan.hpc.unimelb.edu.au" ] && export SPARTAN=1
+
+# Prompt for zsh.
+export PROMPT="[%F{blue}%4~%F{default}] $ "
+if [ -n "${SPARTAN+1}" ]; then
+    RPROMPT="%F{yellow}%? %F{red}%m%F{default}"
+else
+    RPROMPT="%F{yellow}%? %F{8}%m%F{default}"
+fi
+export RPROMPT
