@@ -5,7 +5,7 @@ ZSH_CONFDIR="$HOME/.zsh"
 [ -d "${ZSH_CONFDIR}" ] || mkdir "${ZSH_CONFDIR}"
 
 #
-[ $(hostname) = "spartan.hpc.unimelb.edu.au" ] && export SPARTAN=1
+[[ "$(hostname)" =~ spartan.+ ]] && export SPARTAN=1
 
 # Prompt for zsh.
 export PROMPT="[%F{blue}%4~%F{default}] $ "
