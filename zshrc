@@ -28,6 +28,51 @@ else
     fi
 fi
 
+# Make it faster and easier to background/foreground vim.
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
+
+# Use a menu-style completion interface.
+fpath=(/usr/local/share/zsh-completions $fpath)
+autoload -Uz compinit
+compinit
+
+zstyle ':completion:*' menu select
+
+# Autocompletion for scp from remote computers.
+if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
+  zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+  unset CASE_SENSITIVE
+else
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' '
+l:|=* r:|=*'
+fi
+
+# Save a better history.
+if [ -z $HISTFILE ]; then
+    HISTFILE=$HOME/.zsh_history
+fi
+HISTSIZE=100000
+SAVEHIST=100000
+HISTCONTROL=ignoredups
+
+setopt append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_verify
+setopt inc_append_history
+
 # Finally, if inside Emacs, make sure we can log in using TRAMP by setting a
 # simple to parse prompt.
 [ "${TERM}" = "dumb" ] && export PS1="$ " && return
