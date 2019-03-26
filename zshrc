@@ -7,6 +7,9 @@ ZSH_CONFDIR="$HOME/.zsh"
 # Check if on the spartan HPC cluster.
 [[ "$(hostname)" =~ spartan.+ ]] && export SPARTAN=1
 
+# Load up conda if not on spartan.
+[ ! -n "${SPARTAN+1}" ] && source /Users/mscholz/.miniconda3/etc/profile.d/conda.sh
+
 # Prompt for zsh.
 export PROMPT="[%F{blue}%4~%F{default}] $ "
 if [ -n "${SPARTAN+1}" ]; then
@@ -73,6 +76,6 @@ setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
 
-# Finally, if inside Emacs, make sure we can log in using TRAMP by setting a
-# simple to parse prompt.
-[ "${TERM}" = "dumb" ] && export PS1="$ " && return
+# Finally, if inside Emacs and using TRAMP, make sure we can log in using TRAMP
+# by setting a simple to parse prompt.
+[ "${TERM}" = "dumb" ] && [ -n "${SSH_TTY+1}" ] && export PS1="%4~ $ " && return
